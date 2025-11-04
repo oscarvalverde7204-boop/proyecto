@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloody Mary - Reservaciones VIP</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Fondo animado con neón */
+        .neon-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 102, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            z-index: 0;
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header con efecto neón */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            border: 2px solid #c9a961;
+            box-shadow: 
+                0 0 20px rgba(201, 169, 97, 0.3),
+                inset 0 0 30px rgba(255, 0, 102, 0.1);
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c9a961 0%, #ff0066 50%, #00ffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 0, 102, 0.5);
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        
+        .tagline {
+            font-size: 1.3em;
+            color: #00ffff;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        
+        /* Grid de zonas */
+        .zones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .zone-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #c9a961;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .zone-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 102, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .zone-card:hover::before {
+            opacity: 1;
+        }
+        
+        .zone-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff0066;
+            box-shadow: 
+                0 10px 40px rgba(255, 0, 102, 0.4),
+                0 0 30px rgba(0, 255, 255, 0.2);
+        }
+        
+        .zone-card.selected {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .zone-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #ff0066, #ff0099);
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(255, 0, 102, 0.6);
+        }
+        
+        .zone-badge.vip {
+            background: linear-gradient(135deg, #c9a961, #d4af77);
+            color: #000;
+        }
+        
+        .zone-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            color: #c9a961;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .zone-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .zone-features li {
+            padding: 10px 0;
+            color: #aaa;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .zone-features li::before {
+            content: '⚡';
+            color: #00ffff;
+            font-size: 1.2em;
+        }
+        
+        .zone-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5em;
+            color: #00ffff;
+            font-weight: 700;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+        
+        .zone-price span {
+            font-size: 0.5em;
+            color: #666;
+        }
+        
+        /* Formulario */
+        .reservation-form {
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            padding: 50px;
+            border: 2px solid #c9a961;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .form-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5em;
+            color: #ff0066;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 0, 102, 0.6);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            font-size: 1.1em;
+            color: #c9a961;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 1.1em;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Opciones de pago */
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .payment-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-card:hover {
+            border-color: #c9a961;
+            transform: scale(1.05);
+        }
+        
+        .payment-card.selected {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+        }
+        
+        .payment-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .payment-title {
+            font-size: 1.3em;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .payment-desc {
+            font-size: 0.9em;
+            color: #888;
+        }
+        
+        /* Resumen */
+        .summary-box {
+            background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(255, 0, 102, 0.1) 100%);
+            border: 2px solid #c9a961;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .summary-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8em;
+            color: #c9a961;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.1em;
+        }
+        
+        .summary-total {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            color: #00ffff;
+            text-align: right;
+            margin-top: 20px;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+        }
+        
+        /* Botón de reserva */
+        .btn-reserve {
+            width: 100%;
+            padding: 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ff0066, #ff0099, #ff0066);
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(255, 0, 102, 0.4);
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .btn-reserve:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 0, 102, 0.6);
+        }
+        
+        .btn-reserve:active {
+            transform: translateY(-2px);
+        }
+        
+        /* Modal de confirmación */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #000;
+            border: 3px solid #00ffff;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.6);
+            animation: modalAppear 0.4s ease;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .modal-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5em;
+            color: #00ffff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+        
+        .modal-text {
+            font-size: 1.2em;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .btn-close {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #c9a961, #d4af77);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-close:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(201, 169, 97, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5em;
+                letter-spacing: 4px;
+            }
+            
+            .zones-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reservation-form {
+                padding: 30px 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-bg"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">Bloody Mary</h1>
+            <p class="tagline">Exclusive Nightlife Experience</p>
+        </div>
+        
+        <!-- Zonas VIP -->
+        <div class="zones-grid">
+            <div class="zone-card" onclick="selectZone('standard', 800)">
+                <span class="zone-badge">General</span>
+                <h3 class="zone-title">Zona Standard</h3>
+                <ul class="zone-features">
+                    <li>Mesa para 4-6 personas</li>
+                    <li>Servicio de mesero</li>
+                    <li>Acceso a pista principal</li>
+                    <li>Consumo mínimo incluido</li>
+                </ul>
+                <div class="zone-price">$800 <span>MXN</span></div>
+            </div>
+            
+            <div class="zone-card" onclick="selectZone('premium', 1500)">
+                <span class="zone-badge vip">Premium VIP</span>
+                <h3 class="zone-title">Zona Premium</h3>
+                <ul class="zone-features">
+                    <li>Mesa para 6-8 personas</li>
+                    <li>Botella premium incluida</li>
+                    <li>Vista privilegiada al DJ</li>
+                    <li>Servicio de host dedicado</li>
+                    <li>Acceso prioritario</li>
+                </ul>
+                <div class="zone-price">$1,500 <span>MXN</span></div>
+            </div>
+            
+            <div class="zone-card" onclick="selectZone('platinum', 3000)">
+                <span class="zone-badge vip">Platinum VIP</span>
+                <h3 class="zone-title">Zona Platinum</h3>
+                <ul class="zone-features">
+                    <li>Privado para 8-12 personas</li>
+                    <li>2 Botellas premium a elegir</li>
+                    <li>Zona elevada exclusiva</li>
+                    <li>Host personal toda la noche</li>
+                    <li>Mixer ilimitado</li>
+                    <li>Entrada sin fila garantizada</li>
+                </ul>
+                <div class="zone-price">$3,000 <span>MXN</span></div>
+            </div>
+        </div>
+        
+        <!-- Formulario de Reservación -->
+        <div class="reservation-form">
+            <h2 class="form-title">Completa tu Reservación</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="name" placeholder="Tu nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="phone" placeholder="+52 123 456 7890" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Fecha de Reserva</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Hora de Llegada</label>
+                    <select id="time" required>
+                        <option value="">Selecciona hora</option>
+                        <option value="22:00">10:00 PM</option>
+                        <option value="22:30">10:30 PM</option>
+                        <option value="23:00">11:00 PM</option>
+                        <option value="23:30">11:30 PM</option>
+                        <option value="00:00">12:00 AM</option>
+                        <option value="00:30">12:30 AM</option>
+                        <option value="01:00">1:00 AM</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Número de Personas</label>
+                    <input type="number" id="guests" min="1" max="20" placeholder="4" required>
+                </div>
+                
+                <div class="form-group full">
+                    <label>Peticiones Especiales (Opcional)</label>
+                    <textarea id="requests" placeholder="Cumpleaños, aniversario, preferencias de música..."></textarea>
+                </div>
+            </div>
+            
+            <!-- Opciones de Pago -->
+            <div class="form-group full">
+                <label>Método de Pago</label>
+                <div class="payment-options">
+                    <div class="payment-card" onclick="selectPayment('completo')">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-title">Pago Completo</div>
+                        <div class="payment-desc">100% ahora</div>
+                    </div>
+                    
+                    <div class="payment-card" onclick="selectPayment('anticipo')">
+                        <div class="payment-icon">💰</div>
+                        <div class="payment-title">Anticipo 50%</div>
+                        <div class="payment-desc">50% ahora, 50% en el lugar</div>
+                    </div>
+                    
+                    <div class="payment-card" onclick="selectPayment('plazos')">
+                        <div class="payment-icon">📊</div>
+                        <div class="payment-title">Pago a Plazos</div>
+                        <div class="payment-desc">3 pagos sin intereses</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Resumen -->
+            <div class="summary-box" id="summary" style="display: none;">
+                <h3 class="summary-title">Resumen de Reservación</h3>
+                <div class="summary-item">
+                    <span>Zona seleccionada:</span>
+                    <span id="zoneName">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Método de pago:</span>
+                    <span id="paymentMethod">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0</span>
+                </div>
+                <div class="summary-total">
+                    Total: <span id="total">$0</span>
+                </div>
+            </div>
+            
+            <button class="btn-reserve" onclick="submitReservation()">
+                Confirmar Reservación
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmación -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-icon">🎉</div>
+            <h2 class="modal-title">¡Reservación Confirmada!</h2>
+            <p class="modal-text">
+                Tu reservación ha sido procesada exitosamente.<br>
+                Recibirás un correo con todos los detalles.<br><br>
+                <strong>¡Nos vemos en Bloody Mary!</strong>
+            </p>
+            <button class="btn-close" onclick="closeModal()">Entendido</button>
+        </div>
+    </div>
+    
+    <script>
+        let selectedZone = null;
+        let selectedPrice = 0;
+        let selectedPayment = null;
+        
+        function selectZone(zone, price) {
+            // Remover selección anterior
+            document.querySelectorAll('.zone-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva zona
+            event.currentTarget.classList.add('selected');
+            selectedZone = zone;
+            selectedPrice = price;
+            
+            updateSummary();
+        }
+        
+        function selectPayment(payment) {
+            // Remover selección anterior
+            document.querySelectorAll('.payment-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Seleccionar nuevo método
+            event.currentTarget.classList.add('selected');
+            selectedPayment = payment;
+            
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            if (selectedZone && selectedPayment) {
+                document.getElementById('summary').style.display = 'block';
+                
+                const zoneNames = {
+                    'standard': 'Zona Standard',
+                    'premium': 'Zona Premium VIP',
+                    'platinum': 'Zona Platinum VIP'
+                };
+                
+                const paymentNames = {
+                    'completo': 'Pago Completo (100%)',
+                    'anticipo': 'Anticipo 50%',
+                    'plazos': '3 Pagos sin Intereses'
+                };
+                
+                document.getElementById('zoneName').textContent = zoneNames[selectedZone];
+                document.getElementById('paymentMethod').textContent = paymentNames[selectedPayment];
+                document.getElementById('subtotal').textContent = '$' + selectedPrice + ' MXN';
+                document.getElementById('total').textContent = '$' + selectedPrice + ' MXN';
+            }
+        }
+        
+        function submitReservation() {
+            // Validar campos
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const guests = document.getElementById('guests').value;
+            
+            if (!name || !phone || !email || !date || !time || !guests) {
+                alert('Por favor completa todos los campos requeridos');
+                return;
+            }
+            
+            if (!selectedZone) {
+                alert('Por favor selecciona una zona');
+                return;
+            }
+            
+            if (!selectedPayment) {
+                alert('Por favor selecciona un método de pago');
+                return;
+            }
+            
+            // Mostrar modal de confirmación
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            // Opcional: Limpiar formulario
+            // window.location.reload();
+        }
+        
+        // Establecer fecha mínima como hoy
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').setAttribute('min', today);
+    </script>
+</body>
+</html>
