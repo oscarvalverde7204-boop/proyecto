@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloody Mary - Próxima Inauguración</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Botón flotante del menú */
+        .menu-button {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 1000;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #c9a961;
+            border-radius: 12px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1em;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 25px rgba(201, 169, 97, 0.3),
+                0 0 20px rgba(255, 0, 102, 0.15);
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .menu-button::before {
+            content: 'Menú Bar-Restaurante';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            color: #c9a961;
+            z-index: 2;
+        }
+        
+        .menu-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #c9a961;
+            border-radius: 12px;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+        
+        .menu-button:hover::after {
+            border-color: #ff0066;
+            box-shadow: 
+                0 12px 35px rgba(201, 169, 97, 0.5),
+                0 0 40px rgba(255, 0, 102, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .menu-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .menu-button {
+                top: 15px;
+                left: 15px;
+                padding: 12px 20px;
+                font-size: 0.85em;
+            }
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(255, 0, 102, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(201, 169, 97, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            padding: 40px;
+        }
+        
+        .coming-soon {
+            font-size: 1em;
+            letter-spacing: 6px;
+            color: #c9a961;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        .logo-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 7em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff0066 0%, #c9a961 50%, #ff0066 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease 0.2s backwards;
+            letter-spacing: 5px;
+        }
+        
+        .tagline {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: 300;
+            margin-bottom: 15px;
+            animation: fadeInUp 1s ease 0.4s backwards;
+            letter-spacing: 2px;
+        }
+        
+        .location {
+            font-size: 1.1em;
+            color: #999;
+            margin-bottom: 50px;
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+        
+        .highlight {
+            color: #c9a961;
+            font-weight: 600;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            color: #c9a961;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+        
+        /* Section General */
+        .section {
+            padding: 100px 40px;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #c9a961;
+            font-weight: 700;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.3em;
+            color: #999;
+            max-width: 800px;
+            margin: 0 auto 80px;
+            line-height: 1.6;
+        }
+        
+        /* Concepto 3 en 1 */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .concept-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #222;
+            border-radius: 20px;
+            padding: 50px 35px;
+            text-align: center;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff0066, #c9a961);
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+        
+        .concept-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-15px);
+            border-color: #c9a961;
+            box-shadow: 0 20px 60px rgba(201, 169, 97, 0.3);
+        }
+        
+        .concept-icon {
+            font-size: 5em;
+            margin-bottom: 25px;
+            display: block;
+        }
+        
+        .concept-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            color: #c9a961;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+        
+        .concept-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            color: #fff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .concept-hours {
+            font-size: 1.1em;
+            color: #ff0066;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+        
+        .concept-description {
+            font-size: 1.05em;
+            color: #aaa;
+            line-height: 1.8;
+        }
+        
+        /* Beneficios */
+        .benefits-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .benefit-item {
+            background: linear-gradient(135deg, rgba(201, 169, 97, 0.05) 0%, rgba(255, 0, 102, 0.05) 100%);
+            border-left: 4px solid #c9a961;
+            padding: 35px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(255, 0, 102, 0.1) 100%);
+            transform: translateX(10px);
+            border-left-color: #ff0066;
+        }
+        
+        .benefit-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .benefit-title {
+            font-size: 1.5em;
+            color: #c9a961;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .benefit-text {
+            color: #ccc;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        
+        /* Paquetes de Inauguración */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .package-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #c9a961;
+            border-radius: 20px;
+            padding: 45px;
+            text-align: center;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        
+        .package-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 0, 102, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .package-card:hover::after {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .package-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(201, 169, 97, 0.4);
+        }
+        
+        .package-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff0066, #ff0099);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 0, 102, 0.4);
+            z-index: 2;
+        }
+        
+        .package-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            color: #c9a961;
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .package-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .package-price span {
+            font-size: 0.4em;
+            color: #999;
+            font-weight: 400;
+        }
+        
+        .package-original {
+            color: #666;
+            text-decoration: line-through;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .package-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .package-features li {
+            padding: 12px 0;
+            color: #ddd;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .package-features li::before {
+            content: '✓';
+            color: #00ff88;
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+        
+        .btn-package {
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #c9a961, #d4af77);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1em;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn-package:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(201, 169, 97, 0.5);
+        }
+        
+        /* Call to Action Final */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(255, 0, 102, 0.1) 0%, rgba(201, 169, 97, 0.1) 100%);
+            padding: 100px 40px;
+            text-align: center;
+            border-top: 1px solid rgba(201, 169, 97, 0.3);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.3);
+        }
+        
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            color: #c9a961;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        
+        .cta-text {
+            font-size: 1.4em;
+            color: #ccc;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.7;
+        }
+        
+        .btn-cta {
+            padding: 25px 70px;
+            background: linear-gradient(135deg, #ff0066, #ff0099);
+            border: 3px solid #c9a961;
+            border-radius: 15px;
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 40px rgba(255, 0, 102, 0.4);
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(255, 0, 102, 0.6);
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 60px 40px 30px;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            color: #c9a961;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .footer-text {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .social-link {
+            font-size: 2em;
+            color: #c9a961;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            color: #ff0066;
+            transform: scale(1.2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .concept-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .benefits-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo-main {
+                font-size: 4em;
+            }
+            
+            .tagline {
+                font-size: 1.3em;
+            }
+            
+            .section-title {
+                font-size: 2.5em;
+            }
+            
+            .concept-title {
+                font-size: 1.8em;
+            }
+            
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-title {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Botón de Menú Flotante -->
+    <a href="menu.html" class="menu-button">Menú Bar-Restaurante</a>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="coming-soon">Próxima Inauguración</p>
+            <h1 class="logo-main">BLOODY MARY</h1>
+            <p class="tagline">La Experiencia de Entretenimiento <span class="highlight">Más Completa</span> de Guadalajara</p>
+            <p class="location">📍 Colonia Americana, Guadalajara</p>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+    
+    <!-- Concepto 3 en 1 -->
+    <section class="section" style="background: #000;">
+        <h2 class="section-title">Una Noche, Tres Experiencias</h2>
+        <p class="section-subtitle">
+            El primer concepto en Guadalajara que combina gastronomía, fiesta y hospedaje en un solo lugar. 
+            Todo lo que necesitas para una noche perfecta, sin moverte.
+        </p>
+        
+        <div class="concept-grid">
+            <div class="concept-card">
+                <span class="concept-icon">🍽️</span>
+                <p class="concept-number">PRIMERO</p>
+                <h3 class="concept-title">Bar Restaurante</h3>
+                <p class="concept-hours">6:00 PM - 3:00 AM</p>
+                <p class="concept-description">
+                    Inicia tu noche con cocina rápida de alta calidad. Tacos gourmet, 
+                    croquetas, ensaladas y platos fuertes que satisfacen. Cócteles signature 
+                    y ambiente perfecto para cenar antes de la fiesta.
+                </p>
+            </div>
+            
+            <div class="concept-card">
+                <span class="concept-icon">🎵</span>
+                <p class="concept-number">DESPUÉS</p>
+                <h3 class="concept-title">Antro Exclusivo</h3>
+                <p class="concept-hours">10:00 PM - 3:00 AM</p>
+                <p class="concept-description">
+                    Cuando la cena termina, la fiesta comienza. DJ's residentes, 
+                    zonas VIP, mixología premium y la mejor vibra nocturna. 
+                    Sistema de sonido de última generación y pista que no para hasta el amanecer.
+                </p>
+            </div>
+            
+            <div class="concept-card">
+                <span class="concept-icon">🛏️</span>
+                <p class="concept-number">FINALMENTE</p>
+                <h3 class="concept-title">Hospedaje Boutique</h3>
+                <p class="concept-hours">Disponible 24/7</p>
+                <p class="concept-description">
+                    ¿No quieres manejar? Tenemos 12 habitaciones tipo loft diseñadas 
+                    para tu comodidad. Despierta sin preocupaciones, sin prisa. 
+                    La solución perfecta para cerrar una gran noche.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Beneficios -->
+    <section class="section" style="background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);">
+        <h2 class="section-title">¿Por Qué Bloody Mary?</h2>
+        <p class="section-subtitle">
+            Más que un lugar, es una experiencia completa diseñada para ti
+        </p>
+        
+        <div class="benefits-container">
+            <div class="benefit-item">
+                <span class="benefit-icon">⚡</span>
+                <h3 class="benefit-title">Todo en Un Solo Lugar</h3>
+                <p class="benefit-text">
+                    Olvídate de moverte entre lugares. Cena, fiesta y descanso 
+                    sin salir del mismo edificio. Máxima comodidad, cero complicaciones.
+                </p>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">🚗</span>
+                <h3 class="benefit-title">Cero Preocupaciones</h3>
+                <p class="benefit-text">
+                    No necesitas conductor designado ni Uber a las 3 AM. 
+                    Disfruta sin límites sabiendo que tienes tu habitación lista.
+                </p>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">💎</span>
+                <h3 class="benefit-title">Experiencia Premium</h3>
+                <p class="benefit-text">
+                    Zonas VIP, cócteles signature, comida de calidad y habitaciones 
+                    boutique. Todo con el mismo nivel de excelencia.
+                </p>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">⏰</span>
+                <h3 class="benefit-title">Sin Horarios Presionados</h3>
+                <p class="benefit-text">
+                    Cena cuando quieras entre 6 PM y 10 PM. La fiesta arranca a las 10 
+                    y dura hasta las 3 AM. Tú decides tu ritmo.
+                </p>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">🎉</span>
+                <h3 class="benefit-title">Ambiente Único</h3>
+                <p class="benefit-text">
+                    En pleno corazón de la Colonia Americana, el barrio más vibrante 
+                    de Guadalajara. Rodeado de arte, cultura y vida nocturna.
+                </p>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">🔥</span>
+                <h3 class="benefit-title">Exclusividad Garantizada</h3>
+                <p class="benefit-text">
+                    Cupo limitado en zonas VIP y habitaciones. Reserva con anticipación 
+                    y asegura tu lugar en la experiencia más exclusiva de GDL.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Paquetes de Inauguración -->
+    <section class="section" style="background: #000;">
+        <h2 class="section-title">Paquetes de Inauguración</h2>
+        <p class="section-subtitle">
+            Ofertas exclusivas por tiempo limitado. Sé parte de la historia de Bloody Mary
+        </p>
+        
+        <div class="packages-grid">
+            <div class="package-card">
+                <span class="package-badge">-25% OFF</span>
+                <h3 class="package-title">Noche Clásica</h3>
+                <div class="package-price">$800<span>/persona</span></div>
+                <div class="package-original">Precio regular: $1,066</div>
+                <ul class="package-features">
+                    <li>2 cócteles signature</li>
+                    <li>Acceso al antro (cover incluido)</li>
+                    <li>Primeros 12 clientes reciben habitación GRATIS (sé de los privilegiados)</li>
+                </ul>
+                <button class="btn-package">Reservar Ahora</button>
+            </div>
+            
+            <div class="package-card">
+                <span class="package-badge">-30% OFF</span>
+                <h3 class="package-title">Experiencia VIP</h3>
+                <div class="package-price">$1,500<span>/grupo</span></div>
+                <div class="package-original">Precio regular: $2,143</div>
+                <ul class="package-features">
+                    <li>Mesa VIP Premium en el antro (6-8 personas)</li>
+                    <li>Botella premium incluida</li>
+                    <li>Snacks y finger food ilimitados</li>
+                    <li>Host dedicado toda la noche</li>
+                    <li>Primeros 12 clientes reciben habitación GRATIS (sé de los privilegiados)</li>
+                </ul>
+                <button class="btn-package">Reservar Ahora</button>
+            </div>
+            
+            <div class="package-card">
+                <span class="package-badge">-35% OFF</span>
+                <h3 class="package-title">Platinum Weekend</h3>
+                <div class="package-price">$3,000<span>/grupo</span></div>
+                <div class="package-original">Precio regular: $4,615</div>
+                <ul class="package-features">
+                    <li>Zona Platinum exclusiva (8-12 personas)</li>
+                    <li>3 botellas premium a elegir</li>
+                    <li>Cena completa para todo el grupo</li>
+                    <li>Primeros 12 clientes reciben habitación GRATIS (sé de los privilegiados)</li>
+                </ul>
+                <button class="btn-package">Reservar Ahora</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <h2 class="cta-title">Sé Parte de la Inauguración</h2>
+        <p class="cta-text">
+            Las reservas están abiertas. Cupo limitado para los primeros 100 clientes 
+            que vivirán una experiencia inolvidable con descuentos exclusivos que no se repetirán.
+        </p>
+        <a href="antro.html" class="btn-cta">Reserva Tu Experiencia</a>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">BLOODY MARY</div>
+        <p class="footer-text">Colonia Americana, Guadalajara | Próximamente</p>
+        <div class="social-links">
+            <a href="#" class="social-link">📱</a>
+            <a href="#" class="social-link">📧</a>
+            <a href="#" class="social-link">📍</a>
+        </div>
+        <p class="footer-text">© 2025 Bloody Mary. Todos los derechos reservados.</p>
+    </footer>
+    
+</body>
+</html>
